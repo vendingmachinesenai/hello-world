@@ -1,0 +1,55 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>Client MQTT Web</title>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.1.0/paho-mqtt.min.js">
+  </script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+  <div class="container">
+    <h1 class="text-center">Lamp remote control</h1>
+    <div class="row mt-5 text-center">
+      <div class="col-6">
+        <button class="btn btn-primary btn-lg" id='on'>Turn On</button>
+      </div>
+      <div class="col-6">
+        <button class="btn btn-danger btn-lg" id='off'>Turn Off</button>
+      </div>
+    </div>
+    <h1 id='message' class='text-center'></h1>
+  </div>
+
+
+  <script>
+    var wsbroker = "iot.eclipse.org";
+    var wsport = 443;
+    var randomId = parseInt(Math.random() * 100, 10)
+    var client = new Paho.Client(wsbroker, wsport, "myclientid_" + randomId);
+    client.connect({onSuccess:onConnect , useSSL: true});
+    function onConnect() {
+      client.subscribe("lewagon-iot-lamp");
+      console.log("Connected!");
+      document.getElementById('message').innerText = 'Connected!';
+    }
+    function sendMessage(message) {
+      return function() {
+        mqtt_message = new Paho.Message(message);
+        mqtt_message.destinationName = "lewagon-iot-lamp";
+        client.send(mqtt_message);
+      }
+    }
+    document.getElementById('on').addEventListener('click', sendMessage('on'));
+    document.getElementById('off').addEventListener('click', sendMessage('off'));
+    client.onMessageArrived = onMessageArrived;
+    function onMessageArrived(message) {
+      console.log("onMessageArrived:"+message.payloadString);
+      document.getElementById('message').innerText = 'Lamp is ' + message.payloadString;
+    }
+  </script>
+
+</body>
+</html>
