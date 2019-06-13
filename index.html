@@ -11,7 +11,7 @@
 </head>
 <body>
   <div class="container">
-    <h1 class="text-center">Lamp remote control</h1>
+    <h1 class="text-center">Teste de vm</h1>
     <div class="row mt-5 text-center">
       <div class="col-6">
         <button class="btn btn-primary btn-lg" id='on'>Turn On</button>
@@ -31,14 +31,14 @@
     var client = new Paho.Client(wsbroker, wsport, "myclientid_" + randomId);
     client.connect({onSuccess:onConnect , useSSL: true});
     function onConnect() {
-      client.subscribe("lewagon-iot-lamp");
+      client.subscribe("vending-machine-senai");
       console.log("Connected!");
       document.getElementById('message').innerText = 'Connected!';
     }
     function sendMessage(message) {
       return function() {
         mqtt_message = new Paho.Message(message);
-        mqtt_message.destinationName = "lewagon-iot-lamp";
+        mqtt_message.destinationName = "vending-machine-senai";
         client.send(mqtt_message);
       }
     }
