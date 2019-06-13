@@ -1,4 +1,4 @@
-# hello-world
+# Vending Machine IoT
 
-Repositorio de teste. <br />
-Escrevendo algumas coisas pra tentar aprender a usar o GitHub minimamente.
+<p>A ideia é criar um Vending Machine que esteja conectada à internet e que jogue os dados que colhe por sensores para uma nuvem</p>
+
